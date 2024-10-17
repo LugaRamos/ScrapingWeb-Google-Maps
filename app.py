@@ -4,7 +4,7 @@ import folium
 import pandas as pd
 import os
 
-# Verificar se o diretório 'assets' existe, caso contrário, criá-lo
+# Verificar se o diretório 'static' existe, caso contrário, criá-lo
 if not os.path.exists('assets'):
     os.makedirs('assets')
 
@@ -69,7 +69,7 @@ def pesquisar():
         
         if resultados:
             df_resultados = pd.DataFrame(resultados)
-            df_resultados.to_excel('Empresas.xlsx', index=False)
+            df_resultados.to_excel('assets/Empresas.xlsx', index=False)
 
             mapa = folium.Map(location=[resultados[0]['Latitude'], resultados[1]['Longitude']], zoom_start=10)
             folium.Circle(
@@ -86,7 +86,7 @@ def pesquisar():
 
             mapa.save('assets/mapa.html')
             
-            df = pd.read_excel('Empresas.xlsx')
+            df = pd.read_excel('assets/Empresas.xlsx')
             # Converter o DataFrame para uma lista de dicionários
             resultados = df.to_dict(orient='records')
                         

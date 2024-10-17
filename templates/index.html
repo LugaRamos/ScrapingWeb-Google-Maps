@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <script src="{{ url_for('static', filename='map.js') }}"></script>
     <title>Pesquisa de Empresas</title>
 </head>
@@ -14,62 +17,55 @@
             <img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo">
         </div>
         <input type="text" id="caixa-de-busca" placeholder="Buscar localização">
-        <button onclick="CaixaDeBusca()">Buscar</button>
+        <button onclick="CaixaDeBusca()">Buscar</button> 
+        <button id="tutorialBtn">Tutorial</button> <!-- Botão de Tutorial -->
     </div>
     
+    <!-- Modal de Tutorial -->
+    <div id="tutorialModal" class="modal">
+        <div class="modal-content">
+            <span class="close" aria-label="Fechar Modal">&times;</span>
+            <h2>Como Utilizar a Ferramenta</h2>
+            <p>1. Digite o nome da localização que deseja buscar para poder captar a latitude e longitude do local.</p>
+            <p>2. Para pesquisar um endereço especifico, coloque - Cidade, Bairro, Rua e Numero (Ex: "Paranaguá, Alexandra, Estrada do Rio das Pedras, S/N").</p>
+            <p>3. Escolha um termo de pesquisa (Ex: "Fabrica de Plastico em São Paulo") e o raio do perímetro (Ex: 20000m = 20km) para localizar empresas próximas.</p>
+            <p>4. Clique em "Pesquisar" para visualizar os resultados.</p>
+        </div>
+    </div>
+
     <div id="map"></div>
 
     <div class="container_pesquisa">
         <form action="/pesquisar" method="POST">
             <div class="coordenadas">
                 <div id="coordenadas">Latitude: <span id="latitude"></span>, Longitude: <span id="longitude"></span></div>
-            
                 <input type="hidden" id="latitudeInput" name="latitude">
                 <input type="hidden" id="longitudeInput" name="longitude">
-
                 <label for="termo_pesquisa">Termo de Pesquisa:</label>
-                <input type="text" id="termo_pesquisa" name="termo_pesquisa" required><br>
-                <label for="raio_perimetro">Raio do Perímetro (metros):</label>
-                <input type="number" id="raio_perimetro" name="raio_perimetro" required><br>
+                <input type="text" id="termo_pesquisa" name="termo_pesquisa" required placeholder="Local"><br>
+                <label for="raio_perimetro">Raio do perimetro (metros):</label>
+                <input type="number" id="raio_perimetro" name="raio_perimetro" required placeholder="Raio"><br>
             </div>
             <button id="pesquisar" type="submit">Pesquisar</button>
         </form>
     </div>
 
     <div class="resultado">
-        <h1>Resultado da Pesquisa</h1>
+        <h1>Resultado da Pesquisa: {{ resultados|length }}</h1>
     </div>
 
     <div class="container_resultado">
-        <div class="excel-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Endereço</th>
-                        <th>Telefone</th>
-                        <th>Horário de Funcionamento</th>
-                        <th>Website</th>
-                        <th>Google Maps URL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for empresa in resultados %}
-                        <tr>
-                            <td>{{ empresa['Nome'] }}</td>
-                            <td>{{ empresa['Endereço'] }}</td>
-                            <td>{{ empresa['Telefone'] }}</td>
-                            <td>{{ empresa['Horário de Funcionamento'] }}</td>
-                            <td>{{ empresa['Website'] }}</td>
-                            <td><a href="{{ empresa['Google Maps URL'] }}" target="_blank">Ver no Google Maps</a></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        
         <div class="map-container">
             <iframe src="{{ url_for('static', filename='mapa.html') }}" width="100%" height="400px"></iframe>
         </div>
+
+        <div class="container_resultado">
+            <a href="{{ url_for('static', filename='Empresas.xlsx') }}" download="Empresas.xlsx">
+                <button>Baixar resultados</button>
+            </a>
+        </div>
+    
     </div>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDztFVjqtZPwkfvPNT9k1qoUq_7IsDOAeo&callback=initMap&loading=async"></script>
 </body>

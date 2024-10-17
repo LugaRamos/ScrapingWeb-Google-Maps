@@ -7,7 +7,8 @@ function initMap() {
     // Inicializar o mapa
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: -25.532227, lng: -48.666324 },
-        zoom: 15
+        zoom: 15,
+        mapTypeId: 'satellite',
     });
 
     CaixaDeBusca();
@@ -91,3 +92,36 @@ function CaixaDeBusca() {
 function getCoordenadas() {
     return coordenadas;
 }
+
+// Adiciona o evento ao botão apenas após a página carregar
+window.onload = function() {
+    var btn = document.getElementById("tutorialBtn");
+
+    // Adiciona o evento de clique ao botão de tutorial
+    btn.addEventListener("click", function() {
+        ChamaModal();
+    });
+};
+
+function ChamaModal() {
+    var modal = document.getElementById("tutorialModal");
+    var span = document.getElementsByClassName("close")[0];
+
+    // Exibe o modal ao clicar no botão
+    modal.style.display = "block";
+
+    // Fecha o modal ao clicar no "X"
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Fecha o modal ao clicar fora da área do modal
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+}
+
+
+

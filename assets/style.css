@@ -10,6 +10,21 @@ body {
     color: #000000;
     width: auto;
 }
+
+.header-retangulo {
+    background-color: #013b7a; /* Cor de fundo */
+    border-radius: 25px; /* Borda arredondada */
+    padding: 40px 20px; /* Espaçamento interno */
+    margin: -25px auto; /* Espaçamento externo (opcional) */
+    max-width: auto; /* Largura máxima do retângulo */
+    width: calc(100% - 40px); /* Largura com base no tamanho da tela */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+    text-align: center; /* Centralizar o conteúdo */
+    color: white; /* Cor do texto */
+    height: 70px;
+    margin-bottom: 10px;
+}
+
 .container_pesquisa {
     width: auto;
     max-width: 1200px;
@@ -26,8 +41,9 @@ body {
     margin: 25px;
     text-align: center;
     margin-bottom: 20px;
-    margin-top: 20px;
+    margin-top: -110px;
     overflow: hidden; /* Limpa o float */
+    padding: 10px;
 }
 
 .logo {
@@ -39,7 +55,8 @@ body {
 .logo img {
     width: 200px;
     height: auto;
-    margin-left: 50px;
+    margin-left: 20px;
+    border-radius: 10px;
 }
 
 .container_caixa_busca input[type="text"] {
@@ -66,7 +83,7 @@ body {
     color: #fff;
     border: none;
     cursor: pointer;
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 h6{
@@ -203,6 +220,7 @@ th {
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    margin-top: 30px;
 }
 
 .close {
@@ -217,3 +235,23 @@ th {
     text-decoration: none;
     cursor: pointer;
 }
+
+<!-- Estilo
+footer {
+    text-align: center;
+    padding: 20px 0;
+}
+
+
+.footer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.footer-container img {
+    height: 150px;
+    width: 100%;
+}
+

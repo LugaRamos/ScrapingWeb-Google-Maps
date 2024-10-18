@@ -12,6 +12,8 @@
 </head>
 <body>
 
+    <div class="header-retangulo"></div>
+
     <div class="container_caixa_busca">
         <div class="logo">
             <img src="{{ url_for('static', filename='Logo.png') }}" alt="Logo">
@@ -65,8 +67,15 @@
                 <button>Baixar resultados</button>
             </a>
         </div>
-    
+
     </div>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDztFVjqtZPwkfvPNT9k1qoUq_7IsDOAeo&callback=initMap&loading=async"></script>
+
+    <footer>
+        <div class="footer-container">
+            <img src="{{ url_for('static', filename='footer.png') }}" alt="Footer">
+        </div>
+    </footer>
+
 </body>
 </html>

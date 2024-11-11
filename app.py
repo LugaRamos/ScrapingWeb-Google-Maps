@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 import googlemaps
 import folium
 import pandas as pd
+from io import BytesIO
 import os
 
 # Verificar se o diretório 'static' existe, caso contrário, criá-lo
@@ -11,7 +12,7 @@ if not os.path.exists('assets'):
 app = Flask(__name__, static_folder='assets')
 
 # Inicializar o cliente Google Mapsl
-gmaps = googlemaps.Client(key='AIzaSyDztFVjqtZPwkfvPNT9k1qoUq_7IsDOAeo')
+gmaps = googlemaps.Client(key='AIzaSyAgRF6ZuK7_EO4KrHlemSlYLD2ilteldx4')
 
 def obter_resultados(termo_pesquisa, raio_perimetro, coordenadas, max_paginas):
         # Lista para armazenar os resultados
@@ -69,12 +70,18 @@ def pesquisar():
         
         if resultados:
             df_resultados = pd.DataFrame(resultados)
-            df_resultados.to_excel('assets/Empresas.xlsx', index=False)
 
-            mapa = folium.Map(location=[resultados[0]['Latitude'], resultados[1]['Longitude']], zoom_start=10)
+            # Criar o arquivo Excel em memória
+            output = BytesIO()
+            with pd.ExcelWriter(output, engine='openpyxl') as writer:
+                df_resultados.to_excel(writer, index=False)
+            output.seek(0)
+
+            # Salvar o mapa em memória também
+            mapa = folium.Map(location=[resultados[0]['Latitude'], resultados[0]['Longitude']], zoom_start=10)
             folium.Circle(
                 radius=raio_perimetro,
-                location=[resultados[0]['Latitude'], resultados[1]['Longitude']],
+                location=[resultados[0]['Latitude'], resultados[0]['Longitude']],
                 color='blue',
                 fill=True,
                 fill_color='blue',
@@ -85,20 +92,25 @@ def pesquisar():
                 folium.Marker([lugar['Latitude'], lugar['Longitude']], popup=lugar['Nome']).add_to(mapa)
 
             mapa.save('assets/mapa.html')
-            
-            df = pd.read_excel('assets/Empresas.xlsx')
-            # Converter o DataFrame para uma lista de dicionários
-            resultados = df.to_dict(orient='records')
-                        
-            # Renderizar a página de resultados
-            return render_template('index.html', resultados=resultados)
+
+            # Renderizar a página com os resultados e o link para download
+            return render_template('index.html', resultados=resultados, download_link=True)
         
         else:
-            return 'Erro na pesquisa'
+            return 'Nenhum resultado encontrado.'
     
     else:
-        # Se a solicitação for GET, renderizar o formulário de pesquisa
         return render_template('index.html')
+
+@app.route('/download')
+def download_file():
+    # Enviar o arquivo Excel gerado em memória
+    output = BytesIO()
+    df = pd.read_excel('assets/Empresas.xlsx')
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False)
+    output.seek(0)
+    return send_file(output, as_attachment=True, download_name='Empresas.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 if __name__ == '__main__':
     app.run(debug=True)
